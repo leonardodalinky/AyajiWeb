@@ -7,11 +7,11 @@ import CardHeader from "@material-ui/core/CardHeader";
 import DesktopWindowsIcon from '@material-ui/icons/DesktopWindows';
 import Link from "@material-ui/core/Link";
 import React, { useEffect, useState } from "react";
-import V2rayIcon from '../img/navbar/SvgV2ray';
+import V2rayIcon from '../img/navbar/V2rayIcon';
 import { Container, Divider, Paper, Typography } from "@material-ui/core";
 import { blue, grey } from "@material-ui/core/colors";
 import { makeStyles } from "@material-ui/core/styles";
-import api, { BaseRes, NodeInfo } from '../api/api'
+import api, { BaseRes, NodeInfo } from '../api/api';
 import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 import { AxiosError, AxiosResponse } from 'axios';
@@ -91,7 +91,7 @@ const V2Page = () => {
 
   return (
     <Container>
-      <Card className={classes.cardRoot} variant="outlined">
+      <Card className={classes.cardRoot} variant="elevation">
         <CardHeader 
         title={<Typography variant="h5">
           V2ray 下载

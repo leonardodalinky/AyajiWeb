@@ -1,6 +1,6 @@
 {
     "name": "ayajiweb",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "private": true,
     "dependencies": {
         "@material-ui/core": "^4.11.3",
@@ -17,9 +17,12 @@
         "@types/react-dom": "^17.0.0",
         "@types/react-router-dom": "^5.1.7",
         "axios": "^0.21.1",
+        "clsx": "^1.1.1",
         "particles-bg": "^2.5.0",
         "react": "^17.0.1",
         "react-dom": "^17.0.1",
+        "react-mouse-particles": "^1.1.2",
+        "react-particles-js": "^3.4.1",
         "react-redux": "^7.2.2",
         "react-router": "^5.2.0",
         "react-router-dom": "^5.2.0",

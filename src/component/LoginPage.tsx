@@ -20,6 +20,7 @@ import { login } from '../redux/user'
 import { useDispatch } from 'react-redux';
 import docCookies from '../util/cookie';
 import { useHistory } from 'react-router';
+import ayajiConstants from '../ayajiConstants';
 
 function Copyright() {
   return (
@@ -83,7 +84,7 @@ export default function LoginPage() {
         token: jwt
       }))
       // 跳转到主页面
-      history.push("/")
+      history.push(ayajiConstants.innerUrl.home)
     }).catch((error: AxiosError<BaseRes>) => {
       let res = error.response
       let data = res?.data

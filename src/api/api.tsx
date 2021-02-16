@@ -1,6 +1,9 @@
 import axios from 'axios'
+import docCookies from '../util/cookie'
+import HitokotoRes from './hitokoto'
 
 const APIV1 = "/api/v1"
+const APIHitokoto = "https://v1.hitokoto.cn"
 
 export interface BaseRes {
   code: number
@@ -55,6 +58,20 @@ const api = {
           }
         }
       )
+    }
+  },
+  hitokoto: {
+    GetHitokoto: () => {
+      return axios.get<HitokotoRes>(
+        APIHitokoto + "/?encode=json&charset=utf-8",
+      )
+    }
+  },
+  // 特殊的注销 api
+  logoff: {
+    logoff: () => {
+      docCookies.removeItem("jwt")
+      docCookies.removeItem("username")
     }
   }
 }

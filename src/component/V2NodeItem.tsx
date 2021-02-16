@@ -1,33 +1,15 @@
-import { Container, Divider, Grid, Hidden, IconButton, makeStyles, Typography } from "@material-ui/core";
+import { Accordion, AccordionDetails, AccordionSummary, IconButton, makeStyles, Table, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { NodeInfo } from "../api/api";
 import EventNoteIcon from '@material-ui/icons/EventNote';
-import EventNoteOutlinedIcon from '@material-ui/icons/EventNoteOutlined';
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "@material-ui/lab/Alert";
 import { green, red, yellow } from "@material-ui/core/colors";
 import NetworkCellIcon from '@material-ui/icons/NetworkCell';
 import SignalCellularConnectedNoInternet3BarIcon from '@material-ui/icons/SignalCellularConnectedNoInternet3Bar';
-import Box from "@material-ui/core/Box";
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
 const useStyles = makeStyles((theme) => ({
-  nodeGrid: {
-    display: "flex"
-  },
-  nodeFontKey: {
-    marginLeft: theme.spacing(2),
-  },
-  nodeFont: {
-    marginLeft: theme.spacing(2),
-    wordWrap: "break-word"
-  },
-  nodeGridCenter: {
-    marginLeft: "auto",
-    marginRight: "auto"
-  },
-  nodeGridRight: {
-    marginLeft: "auto",
-  },
   iconButton: {
     marginLeft: theme.spacing(1),
   },
@@ -40,8 +22,21 @@ const useStyles = makeStyles((theme) => ({
   succeedPing: {
     color: green[500],
   },
-  span: {
-    paddingTop: theme.spacing(4),
+  headerCell: {
+    minWidth: theme.spacing(10),
+    width: theme.spacing(20),
+  },
+  succeedPingHeader: {
+    backgroundColor: green[50],
+    color: green[500],
+  },
+  normalPingHeader: {
+    backgroundColor: yellow[50],
+    color: yellow[800],
+  },
+  failPingHeader: {
+    backgroundColor: red[50],
+    color: red[500],
   }
 }));
 
@@ -49,141 +44,128 @@ export interface V2NodeItemProps {
   nodeInfo: NodeInfo
 }
 
-const MdVDivider = () => {
-  const classes = useStyles()
-  return (
-    <Hidden xsDown>
-      <Grid item xs={1} className={classes.nodeGrid}>
-        <Divider orientation="vertical" className={classes.nodeGridRight}/>
-      </Grid>
-    </Hidden>
-  )
-}
-
-const HDivider = () => {
-  return (
-    <Grid item xs={12}>
-      <Divider />
-    </Grid>
-  )
-}
-
-const XsHDivider = () => {
-  return (
-    <Hidden mdUp>
-      <Grid item xs={12}>
-        <Divider />
-      </Grid>
-    </Hidden>
-  ) 
-}
-
-interface FontItemProps {
-  keys: string
-  value: string
-  display?: "initial" | "block" | "inline"
-}
-
-const NodeItemFontKV = (props: FontItemProps) => {
-  const classes = useStyles()
-  return (
-    <Box display="inline">
-      <Typography variant="body1" className={classes.nodeFontKey} display="inline">
-        {props.keys}
-      </Typography>
-      <Typography variant="body1" className={classes.nodeFont} display="inline" {...props}>
-        {props.value}
-      </Typography>
-    </Box>
-  )
-}
-
 const V2NodeItem = (props: V2NodeItemProps) => {
   const classes = useStyles()
   const [copySuccess, setCopySuccess] = useState({active: false, msg: ""})
   let nodeInfo = props.nodeInfo
 
+  const HeaderCell = (props: {children: NonNullable<React.ReactNode>}) => {
+    return (
+      <TableCell className={classes.headerCell}>
+        <Typography variant="body1">
+          {props.children}
+        </Typography>
+      </TableCell>
+    )
+  }
+
+  const ContentCell = (props: {children: NonNullable<React.ReactNode>}) => {
+    return (
+      <TableCell align="left">
+        <div>
+        <Typography variant="body1">
+          {props.children}
+        </Typography>
+        </div>
+      </TableCell>
+    )
+  }
+
+  // 选择扩展面板的头部色调
+  const accordHeadClass = (() => {
+    if (nodeInfo.delay === -1) {
+      return classes.failPingHeader
+    } else if (nodeInfo.delay >= 1000) {
+      return classes.normalPingHeader
+    } else {
+      return classes.succeedPingHeader
+    }
+  })()
+
   return (
-    <Container>
-      <Grid container>
-        <Grid item xs={12} spacing={2} className={classes.nodeGrid}>
-          <Typography variant="h4" className={classes.nodeGridCenter}>
-            节点: {nodeInfo.name}
-          </Typography>
-        </Grid>
-        <HDivider />
-        <Grid item xs={12} md={5}>
-          <NodeItemFontKV keys={"ID: "} value={nodeInfo.nodeId.toString()}/>
-        </Grid>
-        <XsHDivider />
-        <MdVDivider />
-        <Grid item xs={12} md={6}>
-          <NodeItemFontKV keys={"位置: "} value={nodeInfo.location}/>
-        </Grid>
-        <HDivider />
-        <Grid item xs={12} md={5}>
-          <NodeItemFontKV keys={"服务商: "} value={nodeInfo.isp === undefined? "" : nodeInfo.isp}/>
-        </Grid>
-        <XsHDivider />
-        <MdVDivider />
-        <Grid item xs={12} md={6}>
-          <NodeItemFontKV keys={"贡献者: "} value={nodeInfo.provider}/>
-        </Grid>
-        <HDivider />
-        <Grid item xs={12} md={5}>
-          <NodeItemFontKV keys={"延迟: "} value={nodeInfo.delay.toString() + " ms"}/>
-          {
-            nodeInfo.delay === -1?
-            <IconButton 
-            className={classes.iconButton} 
-            color="inherit" 
-            aria-label="ping-failed"
-            size="small">
-              <SignalCellularConnectedNoInternet3BarIcon fontSize="small" className={classes.failPing}/>
-            </IconButton>
-             :
-            <IconButton 
-             className={classes.iconButton} 
-             color="inherit" 
-             aria-label="ping-failed"
-             size="small">
-               <NetworkCellIcon fontSize="small" className={nodeInfo.delay >= 1000? classes.normalPing : classes.succeedPing}/>
-             </IconButton>
-          }
-        </Grid>
-        <XsHDivider />
-        <MdVDivider />
-        <Grid item xs={12} md={6}>
-          <NodeItemFontKV keys={"上次 Ping 时间: "} value={nodeInfo.delayUpdatedAt === undefined? "" : nodeInfo.delayUpdatedAt}/>
-        </Grid>
-        <HDivider />
-        <Grid item xs={12}>
-          <NodeItemFontKV keys={"Vmess: "} value={nodeInfo.CodeVmess}/>
-          <IconButton 
-          className={classes.iconButton} 
-          color="inherit" 
-          aria-label="copy-vmess"
-          size="medium"
-          onClick={() => {
-            navigator.clipboard.writeText(nodeInfo.CodeVmess)
-            setCopySuccess({active: true, msg: `成功复制节点 ${nodeInfo.name} 的 Vmess！`})
-          }}
-          >
-            <EventNoteIcon fontSize="small"/>
-          </IconButton>
-        </Grid>
-        <HDivider />
-        {
-          nodeInfo.description === undefined || nodeInfo.description === ""?
-          null :
-          <>
-            <Grid item xs={12}>
-              <NodeItemFontKV keys={"描述: "} value={nodeInfo.description} display="block"/> 
-            </Grid>
-            <HDivider />
-          </>
-        }
-      </Grid>
+    <>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls={`accord-content-${nodeInfo.nodeId}`}
+          id={`accord-sum-${nodeInfo.nodeId}`}
+          className={accordHeadClass}
+        >
+          <Typography variant="h4">节点: {nodeInfo.name}</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Table style={{wordBreak: "break-word"}}>
+            <TableBody>
+              <TableRow>
+                <HeaderCell>ID: </HeaderCell>
+                <ContentCell>{nodeInfo.nodeId.toString()}</ContentCell>
+              </TableRow>
+              <TableRow>
+                <HeaderCell>位置: </HeaderCell>
+                <ContentCell>{nodeInfo.location}</ContentCell>
+              </TableRow>
+              <TableRow>
+                <HeaderCell>服务商: </HeaderCell>
+                <ContentCell>{nodeInfo.isp === undefined? "" : nodeInfo.isp}</ContentCell>
+              </TableRow>
+              <TableRow>
+                <HeaderCell>贡献者: </HeaderCell>
+                <ContentCell>{nodeInfo.provider}</ContentCell>
+              </TableRow>
+              <TableRow>
+                <HeaderCell>
+                  延迟: 
+                  {
+                    nodeInfo.delay === -1?
+                    <IconButton 
+                    className={classes.iconButton} 
+                    color="inherit" 
+                    aria-label="ping-failed"
+                    size="small">
+                      <SignalCellularConnectedNoInternet3BarIcon fontSize="small" className={classes.failPing}/>
+                    </IconButton>
+                     :
+                    <IconButton 
+                     className={classes.iconButton} 
+                     color="inherit" 
+                     aria-label="ping-failed"
+                     size="small">
+                       <NetworkCellIcon fontSize="small" className={nodeInfo.delay >= 1000? classes.normalPing : classes.succeedPing}/>
+                     </IconButton>
+                  }
+                </HeaderCell>
+                <ContentCell>{nodeInfo.delay.toString() + " ms"}</ContentCell>
+              </TableRow>
+              <TableRow>
+                <HeaderCell>上次 Ping 时间: </HeaderCell>
+                <ContentCell>{nodeInfo.delayUpdatedAt === undefined? "" : nodeInfo.delayUpdatedAt}</ContentCell>
+              </TableRow>
+              <TableRow>
+                <HeaderCell>
+                  Vmess: 
+                  <IconButton 
+                  className={classes.iconButton} 
+                  color="inherit" 
+                  aria-label="copy-vmess"
+                  size="medium"
+                  onClick={() => {
+                    navigator.clipboard.writeText(nodeInfo.CodeVmess)
+                    setCopySuccess({active: true, msg: `成功复制节点 ${nodeInfo.name} 的 Vmess！`})
+                  }}
+                  >
+                    <EventNoteIcon fontSize="small"/>
+                  </IconButton>
+                </HeaderCell>
+                <ContentCell>{nodeInfo.CodeVmess}</ContentCell>
+              </TableRow>
+              <TableRow>
+                <HeaderCell>描述: </HeaderCell>
+                <ContentCell>{nodeInfo.description!}</ContentCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </AccordionDetails>
+      </Accordion>
       <Snackbar 
       open={copySuccess.active} 
       autoHideDuration={5000} 
@@ -193,7 +175,7 @@ const V2NodeItem = (props: V2NodeItemProps) => {
           {copySuccess.msg}
         </Alert>
       </Snackbar>
-    </Container>
+    </>
   )
 }
 

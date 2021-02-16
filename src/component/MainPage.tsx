@@ -1,53 +1,101 @@
-import { Grid, Typography } from "@material-ui/core";
+import { Box, Hidden, Typography } from "@material-ui/core";
 import { makeStyles } from "@material-ui/core/styles";
 import { AxiosError, AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import api from "../api/api"
+import HitokotoRes from "../api/hitokoto";
 
 const useStyles = makeStyles((theme) => ({
   middle: {
     position: 'absolute', 
     left: '50%', 
     top: '50%',
+    minWidth: '90%',
     transform: 'translate(-50%, -50%)'
   },
   textMain: {
-    color: "#ffffff"
+    color: "#ffffff",
+    wordWrap: "break-word"
   },
-  textSub: {
-    color: "#cccccc"
-  }
 }));
 
 const MainPage = () => {
   const classes = useStyles()
+  // TODO 看看 visitCount 在哪里显示更好
   const [visitCount, setVisitCount] = useState(-1)
+  const [hito, setHito] = useState<HitokotoRes>()
   useEffect(() => {
+    // 获取访问信息
     api.statistic.GetStatistic().then((res: AxiosResponse<any>) => {
       var data = res.data
       setVisitCount(data['payload']['total'])
     }).catch((error: AxiosError<any>) => {
-      console.log(error.response)
+      console.error(error.response)
     })
-    api.statistic.PostAddVisit()
+    // 每日格言
+    api.hitokoto.GetHitokoto().then((res) => {
+      setHito(res.data)
+    }).catch((error: AxiosError<any>) => {
+      // TODO
+      console.error(error)
+    })
   }, [])
 
   return (
-    <Grid container spacing={2} className={classes.middle}>
-      <Grid item xs={12}>
-        <Typography variant="h1" align="center" className={classes.textMain}>
-          你好，我的朋友
-        </Typography>
-      </Grid>
-      {
-        visitCount !== -1?
-        <Grid item xs={12}>
-          <Typography variant="h3" align="center" className={classes.textSub}>
-            已经有 {visitCount} 个人次来过力...
-          </Typography>
-        </Grid> : null
-      }
-    </Grid>
+    <>
+      <Hidden xsDown>
+        <Box className={classes.middle} justifyContent="center" alignContent="center">
+          <Box>
+            <Typography variant="h1" align="left" className={classes.textMain}>
+              「
+            </Typography>
+            <Typography variant="h3" align="center" className={classes.textMain} style={{marginLeft: "2em", marginRight: "2em"}}>
+              {hito?.hitokoto}
+            </Typography>
+            <Typography variant="h1" align="right" className={classes.textMain}>
+              」
+            </Typography>
+          </Box>
+          <Box justifyContent="center" alignContent="center" fontStyle="italic">
+            <Typography variant="subtitle1" align="center" className={classes.textMain} style={{fontSize: 22}}>
+              选自 {`『 ${hito?.from} 』`}
+            </Typography>
+            {
+              hito?.from_who !== undefined && hito.from_who !== "" && hito.from_who !== null?
+              <Typography variant="subtitle2" align="center" className={classes.textMain} style={{fontSize: 18}}>
+                —— {hito?.from_who}
+              </Typography> : null
+            }
+          </Box>
+        </Box>
+      </Hidden>
+      <Hidden smUp>
+        <Box className={classes.middle} justifyContent="center" alignContent="center">
+          <Box>
+            <Typography variant="h3" align="left" className={classes.textMain}>
+              「
+            </Typography>
+            <Typography variant="h5" align="center" className={classes.textMain} style={{marginLeft: "2em", marginRight: "2em"}}>
+              {hito?.hitokoto}
+            </Typography>
+            <Typography variant="h3" align="right" className={classes.textMain}>
+              」
+            </Typography>
+          </Box>
+          <Box justifyContent="center" alignContent="center" fontStyle="italic">
+            <Typography variant="subtitle1" align="center" className={classes.textMain} style={{fontSize: 22}}>
+              选自 {`『 ${hito?.from} 』`}
+            </Typography>
+            {
+              hito?.from_who !== undefined && hito.from_who !== "" && hito.from_who !== null?
+              <Typography variant="subtitle2" align="center" className={classes.textMain} style={{fontSize: 18}}>
+                —— {hito?.from_who}
+              </Typography> : null
+            }
+          </Box>
+        </Box>
+      </Hidden>
+    </>
   )
 };
 
