@@ -4,6 +4,8 @@
 
 初衷为检测 V2ray 节点运行，并更新状态以及分享 Vmess 码。
 
+目前部署在 [Ayaji Website](https://ayajike.xyz)
+
 ## 运行方式
 
 首先确保电脑中已经装有 nodejs 环境。
