@@ -5,7 +5,8 @@ import { RootState } from "../redux/store"
 import Drawer from '@material-ui/core/Drawer';
 import { toggleDrawer } from "../redux/uiconfig";
 import React from "react";
-import V2rayIcon from "../img/navbar/V2rayIcon";
+import ProxyIcon from "../img/navbar/ProxyIcon";
+import HexoIcon from "../img/navbar/HexoIcon"
 import ExploreIcon from '@material-ui/icons/Explore';
 import HomeIcon from '@material-ui/icons/Home';
 import clsx from "clsx";
@@ -105,6 +106,10 @@ const NavList = () => {
           <ListItemIcon><SvgIcon component={MarkdownIcon} viewBox="0 0 208 128"/></ListItemIcon>
           <ListItemText primary="HackMD" />
         </ListItem>
+        <ListItem button key="Hexo" onClick={() => {window.location.assign(ayajiConstants.extUrl.hexo)}}>
+          <ListItemIcon><SvgIcon component={HexoIcon} viewBox="0 0 512 512"/></ListItemIcon>
+          <ListItemText primary="Hexo 博客" />
+        </ListItem>
         {/* End - 普通功能区 */}
         {/* Start - 特别区 */}
         {
@@ -112,9 +117,9 @@ const NavList = () => {
           <>
             <Divider variant="middle"/>
             <ListSubheader>特殊功能区</ListSubheader>
-            <ListItem button key="V2ray"  onClick={() => {history.push(ayajiConstants.innerUrl.v2ray)}}>
-              <ListItemIcon><SvgIcon component={V2rayIcon} viewBox="0 0 128 128"/></ListItemIcon>
-              <ListItemText primary="V2ray" />
+            <ListItem button key="Proxy"  onClick={() => {history.push(ayajiConstants.innerUrl.proxy)}}>
+              <ListItemIcon><SvgIcon component={ProxyIcon} viewBox="0 0 256 256"/></ListItemIcon>
+              <ListItemText primary="Proxy" />
             </ListItem>
           </>
           : null

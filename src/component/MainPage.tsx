@@ -26,14 +26,14 @@ const MainPage = () => {
   const [hito, setHito] = useState<HitokotoRes>()
   useEffect(() => {
     // 获取访问信息
-    api.statistic.GetStatistic().then((res: AxiosResponse<any>) => {
+    api.statistic.getStatistic().then((res: AxiosResponse<any>) => {
       var data = res.data
       setVisitCount(data['payload']['total'])
     }).catch((error: AxiosError<any>) => {
       console.error(error.response)
     })
     // 每日格言
-    api.hitokoto.GetHitokoto().then((res) => {
+    api.hitokoto.getHitokoto().then((res) => {
       setHito(res.data)
     }).catch((error: AxiosError<any>) => {
       // TODO

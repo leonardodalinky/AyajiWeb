@@ -18,10 +18,14 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noEmit": true,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
   },
   "include": [
     "src"
   ],
-  "proxy": "http://127.0.0.1:7500"
+  "proxy": {
+    "/api/v1": {
+      "target": "http://localhost:7500"
+    }
+  }
 }

@@ -1,11 +1,12 @@
 const ayajiConstants = {
   extUrl: {
-    hackmd: "https://hackmd.ayajike.xyz"
+    hackmd: "https://hackmd.ayajike.xyz",
+    hexo: "https://hexo.ayajike.xyz",
   },
   innerUrl: {
     home: "/",
     about: "/about",
-    v2ray: "/v2ray",
+    proxy: "/proxy",
     profile: "/profile",
     login: "/login",
     defaultAvatar: process.env.PUBLIC_URL + "/img/default_avatar.png",

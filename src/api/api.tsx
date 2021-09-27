@@ -11,7 +11,13 @@ export interface BaseRes {
   payload: any
 }
 
-// 节点信息
+export interface BaseResWithPayload<T> {
+  code: number
+  msg: string
+  payload: T
+}
+
+// deprecated. v2ray 节点信息
 export interface NodeInfo {
   nodeId: number
   name: string
@@ -25,9 +31,16 @@ export interface NodeInfo {
   CodeVmess: string
 }
 
+export interface ProxyInfo {
+  id: number
+  name: string
+  sub_url: string
+}
+
+
 const api = {
   login: {
-    PostLogin: (username: string) => {
+    postLogin: (username: string) => {
       return axios.post(
         APIV1 + "/user/login",
         {
@@ -37,19 +50,20 @@ const api = {
     }
   },
   statistic: {
-    GetStatistic: () => {
+    getStatistic: () => {
       return axios.get(
         APIV1 + "/statistic/visit"
       )
     },
-    PostAddVisit: () => {
+    postAddVisit: () => {
       return axios.post(
         APIV1 + "/statistic/visit"
       )
     },
   },
+  // deprecated. 原本用于 v2ray，现在转综合 proxy 页面了
   node: {
-    GetNodes: (jwt: string) => {
+    getNodes: (jwt: string) => {
       return axios.get(
         APIV1 + "/vray/info",
         {
@@ -60,8 +74,20 @@ const api = {
       )
     }
   },
+  proxy: {
+    getProxy: (jwt: string) => {
+      return axios.get(
+        APIV1 + "/proxy/info",
+        {
+          headers: {
+            "Authorization": `Bearer ${jwt}`
+          }
+        }
+      )
+    }
+  },
   hitokoto: {
-    GetHitokoto: () => {
+    getHitokoto: () => {
       return axios.get<HitokotoRes>(
         APIHitokoto + "/?encode=json&charset=utf-8",
       )

@@ -68,7 +68,7 @@ export default function LoginPage() {
   const [wrong, setWrong] = useState({active: false, msg: ""})
   // 登录按钮的行为
   const clickLogin = () => {
-    api.login.PostLogin(username).then((res: AxiosResponse<BaseRes>) => {
+    api.login.postLogin(username).then((res: AxiosResponse<BaseRes>) => {
       let data = res.data
       // var userId = data.payload["userId"]
       var user = data.payload["username"]

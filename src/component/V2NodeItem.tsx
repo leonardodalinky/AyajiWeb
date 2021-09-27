@@ -1,3 +1,4 @@
+// deprecated. 现在已经不再使用这个组件了
 import { Accordion, AccordionDetails, AccordionSummary, IconButton, makeStyles, Table, TableBody, TableCell, TableRow, Typography } from "@material-ui/core";
 import React, { useState } from "react";
 import { NodeInfo } from "../api/api";
@@ -8,6 +9,7 @@ import { green, red, yellow } from "@material-ui/core/colors";
 import NetworkCellIcon from '@material-ui/icons/NetworkCell';
 import SignalCellularConnectedNoInternet3BarIcon from '@material-ui/icons/SignalCellularConnectedNoInternet3Bar';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+
 
 const useStyles = makeStyles((theme) => ({
   iconButton: {

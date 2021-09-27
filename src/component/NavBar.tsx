@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import { Avatar, Box, Divider, Fade, Hidden, Menu, MenuItem, SvgIcon, Tabs } from '@material-ui/core';
-import V2rayIcon from '../img/navbar/V2rayIcon'
+import ProxyIcon from "../img/navbar/ProxyIcon";
 import MarkdownIcon from '../img/navbar/MarkdownIcon';
 import { useHistory } from 'react-router';
 import Snackbar from '@material-ui/core/Snackbar';
@@ -18,7 +18,7 @@ import { toggleDrawer } from '../redux/uiconfig';
 import api from '../api/api';
 import ayajiConstants from '../ayajiConstants';
 import { Tab } from '@material-ui/core';
-import { TabPanel } from '@material-ui/lab';
+import HexoIcon from "../img/navbar/HexoIcon";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -82,18 +82,21 @@ export default function ButtonAppBar() {
           scrollButtons="auto"
           aria-label="nav-tabs"
         >
-          {/* v2ray 图标登陆后显示 */}
+          {/* proxy 图标登陆后显示 */}
                     {
             userStatus.isLogin?
             <>
-              <Tab label="V2ray" icon={<SvgIcon component={V2rayIcon} viewBox="0 0 128 128"/>}
-                onClick={() => {history.push(ayajiConstants.innerUrl.v2ray)}}
+              <Tab label="Proxy" icon={<SvgIcon component={ProxyIcon} viewBox="0 0 256 256"/>}
+                onClick={() => {history.push(ayajiConstants.innerUrl.proxy)}}
               />
             </>
             : null
           }
           <Tab label="HackMD" icon={<SvgIcon component={MarkdownIcon} viewBox="0 0 208 128"/>}
             onClick={() => {window.location.assign(ayajiConstants.extUrl.hackmd)}}
+          />
+          <Tab label="Hexo 博客" icon={<SvgIcon component={HexoIcon} viewBox="0 0 512 512"/>}
+               onClick={() => {window.location.assign(ayajiConstants.extUrl.hexo)}}
           />
         </Tabs>
       </>

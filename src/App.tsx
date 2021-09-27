@@ -6,7 +6,7 @@ import {
   Switch,
 } from "react-router-dom";
 import MainPage from './component/MainPage';
-import V2Page from './component/V2Page';
+import ProxyPage from './component/ProxyPage';
 import LoginPage from './component/LoginPage'
 import { RootState } from './redux/store';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,7 +38,7 @@ function App() {
       token: jwt
     }))
     // 增加一次站内统计计数
-    api.statistic.PostAddVisit()
+    api.statistic.postAddVisit()
   }, [dispatch])
 
   return (
@@ -55,10 +55,11 @@ function App() {
         <Route path={ayajiConstants.innerUrl.login}>
           <LoginPage />
         </Route>
-        <Route path={ayajiConstants.innerUrl.v2ray}>
+        <Route path={ayajiConstants.innerUrl.proxy}>
           {
-            userStatus.isLogin?
-            <V2Page /> : null
+            // userStatus.isLogin? <V2Page /> : null
+            // userStatus.isLogin? <ProxyPage /> : null
+            <ProxyPage />
           }
         </Route>
         <Route path={ayajiConstants.innerUrl.about}>

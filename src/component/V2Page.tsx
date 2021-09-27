@@ -1,3 +1,4 @@
+// deprecated. 目前不再使用 v2ray 页面，而使用更加宽泛的 proxy 页面
 import AndroidIcon from '@material-ui/icons/Android';
 import Button from "@material-ui/core/Button";
 import Card from "@material-ui/core/Card";
@@ -16,6 +17,7 @@ import { RootState } from '../redux/store';
 import { useSelector } from 'react-redux';
 import { AxiosError, AxiosResponse } from 'axios';
 import V2NodeItem from './V2NodeItem';
+
 
 const useStyles = makeStyles((theme) => ({
   cardRoot: {
@@ -59,11 +61,11 @@ interface RawNodeInfo {
 
 const V2Page = () => {
   const classes = useStyles();
-  var userStatus = useSelector((state: RootState) => state.user)
+  const userStatus = useSelector((state: RootState) => state.user);
   const [nodeInfos, setNodeInfos] = useState(new Array<NodeInfo>())
 
   const GetNodeInfos = (jwt: string) => {
-    api.node.GetNodes(jwt).then((res: AxiosResponse<BaseRes>) => {
+    api.node.getNodes(jwt).then((res: AxiosResponse<BaseRes>) => {
       let data = res.data
       var payload: RawNodeInfo[] = data.payload["nodes"]
       var newNodeInfos = payload.map<NodeInfo>((value, index, array) => {
@@ -81,8 +83,8 @@ const V2Page = () => {
         }
       })
       setNodeInfos(newNodeInfos)
-    }).catch((error: AxiosError<BaseRes>) => {
-      // TODO 打印失败消息
+    }).catch((err: AxiosError<BaseRes>) => {
+      console.error(err)
     })
   }
   useEffect(() => {
